@@ -1,48 +1,68 @@
-import React, { useState } from 'react';
-import { Navbar, Nav, Container, Row } from 'react-bootstrap';
-import { styles } from './styles/style';
+import React, {useRef, useState, useEffect} from 'react';
+import {Navbar, Nav, Container, Row, Button, Image, NavbarCollapse} from 'react-bootstrap';
+import AnimatedBackground from './AnimatedBackground';
+import 'bootstrap-icons/font/bootstrap-icons.css';
 
-const name = "Filip Szemraj's";
-const desc = "I am student of third year at Politechnica Swietokrzyska in Kielce, major IT. Curious about new technologies and passionate about self-development ";
+
+
+
+
 
 export const NavBar = () => {
     const [showText, setShowText] = useState(true);
+    const divWithAnimatedBackgroundRef = useRef(null);
 
+    const [expanded, setExpanded] = useState(false);
+    const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 992);
 
-	return (
-        
+    useEffect(() => {
+        function handleResize() {
+            setIsLargeScreen(window.innerWidth >= 992);
+        }
 
-            <Navbar style={styles.Header} data-bs-theme="dark" expand="lg" className="bg-body-tertiary">
-            <Container style={styles.mainHeaderContainer} className="d-flex flex-column justify-content-between">
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
-                <Container className="d-flex justify-content-between align-items-stretch" style={styles.HeaderFirstRow}>
-                    <Row>
-                        <Navbar.Brand>{name}</Navbar.Brand>
-                        <Navbar.Brand>portfolio</Navbar.Brand>
-                    </Row>
+    return (
+        <div ref={divWithAnimatedBackgroundRef} style={{ position: 'relative', width: '100%', height: '25vh', overflow:"visible", zIndex:'5' }}>
+            <AnimatedBackground checkCondition={false} parentRef={divWithAnimatedBackgroundRef} />
 
-
-                    
-                    <Navbar.Toggle aria-controls="responsive-navbar-nav" onClick={() => setShowText(!showText)} /> 
-
+            <Navbar id="first" expand="lg" onToggle={setExpanded} expanded={expanded} style={{flexWrap:'wrap', position: 'absolute', width: '100%', height:'100%',top: 0, left: 0, backgroundColor:'transparent', alignContent:'start', }}>
+                <Container fluid id="toSet" style={{display: 'flex', justifyContent: 'space-around' }}>
+                    <Navbar.Brand href="#" style={{color: '#F0F0F0'}}><h1>Filip Szemraj</h1></Navbar.Brand>
+                    <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between'}}>
+                        <Button className='m-1' style={{color:'#052c5c', backgroundColor:'#3a8bbf', borderColor:'#052c5c'}}>Blog</Button>
+                        <Navbar.Toggle className='m-1' aria-controls="responsive-navbar-nav" style={{color:'#052c5c', backgroundColor:'#3a8bbf', borderColor:"#052c5c"}} onClick={() => setShowText(!showText)}>
+                            <i className="bi bi-list"></i>
+                        </Navbar.Toggle>
+                        {isLargeScreen && !expanded && (
+                            <Navbar.Collapse id="responsive-navbar-nav" >
+                                <Nav style={{color: "#052c5c"}}>
+                                    <Nav.Link href="#features" style={{color: "#f0f0f0"}}>Features</Nav.Link>
+                                    <Nav.Link href="#pricing" style={{color: "#f0f0f0"}}>Pricing</Nav.Link>
+                                    <Nav.Link href="#aboutMe" style={{color: "#f0f0f0"}}>About me</Nav.Link>
+                                </Nav>
+                            </Navbar.Collapse>
+                        )}
+                    </div>
                 </Container>
 
-                <Container style={styles.DescContainer}>
-
-                    <Navbar.Text style={showText ? {} : { visibility: 'hidden', display: 'none', }}>{desc}</Navbar.Text>
-
-
-                    <Navbar.Collapse id="collapse navbar-collapse" style={!showText ? {} : { visibility: 'hidden', display: 'none', }}>
-                        <Nav className="ml-auto">
-                            <Nav.Link href="#home">About the Page</Nav.Link>
-                            <Nav.Link href="#features">Skills</Nav.Link>
-                            <Nav.Link href="#pricing">Projects</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-
-
+                <Container id="second" fluid style={{position: 'absolute', bottom: 0, left: 0, transform:"translateY(50%)", backgroundColor: 'transparent', width:'100%', justifyContent:'center' }}>
+                    <Navbar.Text style={showText ? {color:'#052c5c', justifyContent:'center'} : { visibility: 'hidden', display: 'none' }}>
+                        I am student of third year at Politechnica Świetokrzyska in Kielce, major IT. Curious about new technologies and passionate about self-development
+                    </Navbar.Text>
+                    {!isLargeScreen && expanded && (
+                        <Navbar.Collapse id="responsive-navbar-nav" >
+                            <Nav style={{display: "flex", flexDirection: "column", color: "#052c5c"}}>
+                                <Nav.Link href="#features">Features</Nav.Link>
+                                <Nav.Link href="#pricing">Pricing</Nav.Link>
+                                <Nav.Link href="#aboutMe">About me</Nav.Link>
+                            </Nav>
+                        </Navbar.Collapse>
+                    )}
                 </Container>
-            </Container>
             </Navbar>
-  );
+        </div>
+    );
 }

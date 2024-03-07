@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  scrollBehavior: auto;
+
 }
 
 .App-logo {
@@ -28,6 +30,62 @@
   color: #61dafb;
 }
 
+.custom-cursorRight:hover {
+  cursor: url("./components/styles/images/arrowIcons/caret-right-fill.svg"), auto;
+}
+
+.custom-cursorLeft:hover {
+  cursor: url("./components/styles/images/arrowIcons/caret-left-fill.svg"), auto;
+}
+
+.custom-button{
+  margin: 0.35vw;
+  color: #f0f0f0;
+  background-color: transparent;
+  border: 1px solid #f0f0f0;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 0.25rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+}
+.custom-button:hover{
+  background-color: #052c5c;
+  border-color: #052c5c;
+}
+
+.active-button{
+  background-color:black;
+}
+
+.custom-button:focus {
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(38, 143, 255, 0.5);
+}
+
+.description{
+  position:absolute;
+  left:-115%;
+  width:115%;
+  padding-right:10%;
+}
+.description dt{
+  text-align:left;
+  font-size:3.75vh;
+}
+.description dd{
+  text-align:left;
+  font-size:1.75vh;
+}
+.dot i{
+  color:#f0f0f0;
+}
+
+.dot.active i{
+  color:black;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -36,3 +94,4 @@
     transform: rotate(360deg);
   }
 }
+

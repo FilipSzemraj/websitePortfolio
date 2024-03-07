@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useEffect, useState, useLayoutEffect } from 'react';
 import { Container, Button } from 'react-bootstrap';
 import { styles } from './styles/style';
 import { GoogleButton } from './googleButton';
@@ -7,8 +7,10 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 
 
 export const Footer = () => {
+
+
     return (
-        <footer className="text-center" style={{ backgroundColor: '#10110b', width: '100%' }}>
+    <div>
             <Container className="p-4 pb-0">
                 <section className="mb-4">
                     <a className="btn text-white btn-floating m-1" style={{ backgroundColor: '#3b5998' }} href="https://www.facebook.com/filip.szemraj.33" role="button">
@@ -34,9 +36,9 @@ export const Footer = () => {
                 </section>
             </Container>
             <div className="text-center p-3">
-                &#169; 2023 Copyright: Filip Szemraj
+                &#169; 2024 Copyright: Filip Szemraj
             </div>
-        </footer>
+    </div>
     );
 };
 
