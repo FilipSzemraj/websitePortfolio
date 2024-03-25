@@ -8,11 +8,11 @@ import { ActiveProjectProvider } from './components/MyContext.js';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  //<React.StrictMode>
       <ActiveProjectProvider>
           <App />
       </ActiveProjectProvider>
-  </React.StrictMode>
+  //</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

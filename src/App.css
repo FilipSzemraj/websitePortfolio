@@ -86,6 +86,58 @@
   color:black;
 }
 
+.item {
+  //width: 150px;
+  //height: 150px;
+  width: 15vw;
+  height: 15vh;
+  color: white;
+  border-radius: 0.75rem;
+  background-color: #78a8d6;
+  border: 1px solid #052c5c;
+  z-index: 11;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #f0f0f0;
+}
+
+.item.active {
+  background-color: #78a8d6;
+}
+
+.innerDiv {
+  position: absolute;
+  //width: 250%;
+  //height: 150%;
+  width:52vw;
+  height:30vh;
+  top: -50%;
+  background-color: #78a8d6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  color: #f0f0f0;
+  border: 2px solid #052c5c;
+}
+
+.divToMove{
+  width:30vw;
+  height:25vh;
+  text-align: justify;
+  display:flex;
+  font-size:1rem;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #052c5c;
+  color: #f0f0f0;
+  flex-direction: column;
+  padding:10px;
+  border-radius: 2.5rem;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

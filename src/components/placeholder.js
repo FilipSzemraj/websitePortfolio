@@ -260,7 +260,6 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
                     {componentMap[title] && componentMap[title].body ? (
 
                         <div style= {isWide ? styles.IconContainer : styles.IconContainerSmallScreen}>
-
                             {renderComponentBody(title)}
 
                         </div>

@@ -16,8 +16,10 @@ import {ScrollToPlugin} from 'gsap/ScrollToPlugin';
 import CardPairTechnologiesAndProject from "./components/cardPairTechnologiesAndProject";
 import { useActiveProject } from './components/MyContext.js';
 import {Path} from './components/Path';
+import { MotionPathPlugin } from 'gsap/MotionPathPlugin';
 
-gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
+
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, MotionPathPlugin);
 
 
 
@@ -31,6 +33,7 @@ function App() {
     const secondContainer = useRef();
     const thirdContainer = useRef();
     const nextSectionButtonRef = useRef();
+    const tlForMovingDiv = useRef();
 
     const { activeProject, setActiveProject } = useActiveProject();
 
@@ -39,97 +42,146 @@ function App() {
 
 
     const [matches, setMatches] = useState(window.matchMedia("(min-width: 1025px)").matches);
+    const matchesRef = useRef(matches);
+    matchesRef.current=matches;
+
+    const [showPopout, setShowPopout] = useState(false);
+
 
     useEffect(() => {
         const handler = e => setMatches(e.matches);
         const mediaQuery = window.matchMedia("(min-width: 1025px)");
-        mediaQuery.addEventListener('change', handler);
 
-        return () => mediaQuery.removeEventListener('change', handler);
+        const handleResize = () => {
+            const actualPosition = window.scrollY;
+            let snap = gsap.utils.snap(window.innerHeight);
+            window.scrollTo(0, snap(actualPosition));
+        };
+
+        mediaQuery.addEventListener('change', handler);
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            mediaQuery.removeEventListener('change', handler);
+            window.removeEventListener('scroll', handleResize);
+        }
     }, []);
+
 
 
     const { contextSafe } = useGSAP({scope: nextSectionButtonRef.current});
 
+
+
     useGSAP(() => {
-        let lastScrollTime = 0;
+        if(matchesRef.current) {
+            let lastScrollTime = 0;
 
-        const handleWheel = (e) => {
-            e.preventDefault();
+            const handleWheel = (e) => {
+                e.preventDefault();
 
-            const currentTime = new Date().getTime();
-            if (currentTime - lastScrollTime < 800) {
-                return;
-            }
-
-            lastScrollTime = currentTime;
-
-            const windowHeight = window.innerHeight;
-            const totalScrollHeight = document.body.scrollHeight;
-            const currentScroll = window.scrollY;
-            let nextScroll;
-
-            if (e.deltaY > 0) {
-                if (currentScroll >= totalScrollHeight - windowHeight - 150) {
-                    nextScroll = totalScrollHeight - windowHeight;
-                } else {
-                    nextScroll = Math.min(currentScroll + windowHeight, totalScrollHeight - windowHeight - 150);
+                const currentTime = new Date().getTime();
+                if (currentTime - lastScrollTime < 800) {
+                    return;
                 }
-            } else {
-                if (currentScroll >= totalScrollHeight - windowHeight && currentScroll < totalScrollHeight - 150) {
-                    nextScroll = totalScrollHeight - windowHeight - 150;
+
+                lastScrollTime = currentTime;
+
+                const windowHeight = window.innerHeight;
+                const totalScrollHeight = document.body.scrollHeight;
+                const currentScroll = window.scrollY;
+                let nextScroll;
+
+                if (e.deltaY > 0) {
+                    if (currentScroll >= totalScrollHeight - windowHeight - 150) {
+                        nextScroll = totalScrollHeight - windowHeight;
+                    } else {
+                        nextScroll = Math.min(currentScroll + windowHeight, totalScrollHeight - windowHeight - 150);
+                    }
                 } else {
-                    nextScroll = Math.max(currentScroll - windowHeight, 0);
+                    if (currentScroll >= totalScrollHeight - windowHeight && currentScroll < totalScrollHeight - 150) {
+                        nextScroll = totalScrollHeight - windowHeight - 150;
+                    } else {
+                        nextScroll = Math.max(currentScroll - windowHeight, 0);
+                    }
                 }
-            }
 
-            gsap.to(window, {duration: 0, scrollTo: {y: nextScroll, autoKill: false}});
-        };
+                gsap.to(window, {duration: 0, scrollTo: {y: nextScroll, autoKill: false}});
+            };
 
-        window.addEventListener('wheel', handleWheel, {passive: false});
+            window.addEventListener('wheel', handleWheel, {passive: false});
 
-        return () => {
-            window.removeEventListener('wheel', handleWheel);
-        };
+            return () => {
+                window.removeEventListener('wheel', handleWheel);
+            };
+        }
     }, []);
 
     useGSAP((context, contextSafe) => {
+        if(matchesRef.current) {
 
-        gsap.utils.toArray('.cardRight, .cardLeft').forEach((element) => {
-            const directionMultiplier = element.classList.contains('cardLeft') ? -1 : 1;
-            const moveX = `${directionMultiplier * (parseFloat(widthOfCard) / 2 + (45 - parseFloat(widthOfCard)))}vw`;
+            gsap.utils.toArray('.cardRight, .cardLeft').forEach((element) => {
+                const directionMultiplier = element.classList.contains('cardLeft') ? -1 : 1;
+                const moveX = `${directionMultiplier * (parseFloat(widthOfCard) / 2 + (45 - parseFloat(widthOfCard)))}vw`;
 
-            const parentCardPair = element.closest('.cardPair');
+                const parentCardPair = element.closest('.cardPair');
 
 
-            gsap.to(element, {
-                scrollTrigger: {
-                    trigger: element,
-                    start: "top bottom",
-                    markers: true,
-                    endTrigger:parentCardPair,
-                    end: "bottom bottom",
-                    scrub: true,
-                },
-                x: moveX,
+                gsap.to(element, {
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top bottom",
+                        markers: true,
+                        endTrigger: parentCardPair,
+                        end: "bottom bottom",
+                        scrub: true,
+                    },
+                    x: moveX,
+                });
             });
-        });
-
+        }
 
     }, {scope: cardContainer});
 
 
     const scrollToNextSection = contextSafe(() => {
-        const nextSection = document.getElementById('nextSection');
-        if (nextSection) {
-            gsap.to(window, {
-                scrollTo: { y: nextSection.offsetTop, autoKill: false },
-                ease: "expo.out",
-                duration: 0,
-            });
+        if(matchesRef.current) {
+            const nextSection = document.getElementById('nextSection');
+            if (nextSection) {
+                gsap.to(window, {
+                    scrollTo: {y: nextSection.offsetTop, autoKill: false},
+                    ease: "expo.out",
+                    duration: 0,
+                });
+            }
+        }else{
+            setShowPopout(true);
         }
 
     });
+
+    const handleClick = contextSafe((event) => {
+        const clickX = event.clientX;
+        const clickY = event.clientY;
+        const dimensionsOfDiv = thirdContainer.current.getBoundingClientRect();
+        const point = {x: dimensionsOfDiv.width/2, y: dimensionsOfDiv.height/2}
+        const rawPath = MotionPathPlugin.convertCoordinates(thirdContainer.current, {x:clickX, y:clickY}, point)
+
+        tlForMovingDiv.current = gsap.timeline();
+
+        tlForMovingDiv.current.to(thirdContainer.current, {
+            x:(clickX-(dimensionsOfDiv.width/2)),
+            y:(clickY-(dimensionsOfDiv.height/2)),
+            duration:2,
+        }).to(thirdContainer.current, {
+            scale:0.5,
+            duration:0.5,
+        }, "<").to(thirdContainer.current, {
+            scale:1,
+            duration:1,
+        }, ">");
+
+    })
 
     return (
         <div className="App" style={styles.Body} ref={containerRef}>
@@ -149,9 +201,15 @@ function App() {
                 <Button ref={nextSectionButtonRef} className="btn btn-default" type="button" aria-haspopup="true" aria-expanded="true" variant="primary" style={styles.NextSectionButton} onClick={scrollToNextSection}>
                     <i className="bi bi-arrow-down"></i>
                 </Button>
+                {showPopout && (
+                    <div style={{color:'red'}}>
+                        Page is currently being prepared for full responsiveness. Currently, it can only be utilized under the condition checked: (min-width: 1025px).
+                    </div>
+                    )}
 
             </div>
 
+            {matchesRef.current ? (
             <div id="nextSection" className="BodyOfSecondSection" style={styles.ContainerBottom}>
 
                     <Container ref={cardContainer} style={styles.CardsContainer}>
@@ -163,17 +221,16 @@ function App() {
                         </div>
                         <div className="PathContainer" id="secondPair" style={styles.CardPair}>
                             <div ref={secondContainer} className="PathCenter" style={styles.PathContainer} >
-                                <Path />
+                                <Path ref={secondContainer}/>
                             </div>
                             {/*<div className="newCardLeft" style={{position:'absolute', top:0, right:0, backgroundColor:'gray'}}>
                             </div>*/}
                         </div>
-                        <div className="cardPair" id="thirdPair" style={styles.CardPair}>
-                            <div className="newCardRight" style={{position:'absolute', top:0, left:0,}}>
-                                no kawal tekstu
-                            </div>
-                            <div ref={thirdContainer} className="cardRight">
-                                <CardComponent placement="start" title="Hire Me!" textToCard={"esa"} textToOffcanvas={"ase"} isWide={matches}/>
+                        <div className="cardPair" id="thirdPair" style={{...styles.CardPair}} onClick={handleClick}>
+                            <div ref={thirdContainer} className="divToMove">
+                                <h5>Click somewhere outside this div!</h5>
+                                <p>I created this website to enhance my understanding of GSAP animations and to learn React better</p>
+                                <p style={{textAlign:'left'}}>I know it's just the start of my journey, but I'm very excited about it!</p>
                             </div>
                         </div>
                     </Container>
@@ -182,6 +239,7 @@ function App() {
 
 
             </div>
+            ): null}
 
             <div id="footer" className="text-center" style={{ backgroundColor: '#10110b', width: '100%' }}>
                 <Footer />
