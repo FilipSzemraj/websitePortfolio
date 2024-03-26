@@ -10,6 +10,7 @@ import exerciseDiaryChart from "./images/projectImages/exerciseDiaryChart.JPG";
 import whaleNotesLoginRegister from "./images/projectImages/WhaleNotesLoginRegister.jpg";
 import whaleNotesMainScreen from "./images/projectImages/WhaleNotesMainScreen.jpg";
 import whaleNotesWelcomeScreen from "./images/projectImages/WhaleNotesWelcomeScreen.jpg";
+import whaleNotesMap from "./images/projectImages/WhaleNotesMap.png";
 import azure from "./images/projectImages/azure.jpg";
 import python from "./images/projectImages/python.JPG";
 import wphp1 from "./images/projectImages/wgrywaniePlikowPHP.jpg";
@@ -37,6 +38,7 @@ const projectImages = {
     wphp2,
     dbphp,
     dbphp2,
+    whaleNotesMap
 };
 
 export default projectImages;

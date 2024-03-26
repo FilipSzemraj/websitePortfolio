@@ -33,10 +33,11 @@ export const Carousel = forwardRef(({}, ref) => {
         {
             image: [projectImages.whaleNotesLoginRegister,
                 projectImages.whaleNotesWelcomeScreen,
-                projectImages.whaleNotesMainScreen],
-            title:'Exercise diary',
-            tech:"C++, Qt",
-            description:"Project of exercise diary create with C++ and Qt",
+                projectImages.whaleNotesMainScreen,
+                projectImages.whaleNotesMap],
+            title:'WhaleNotes - team management app',
+            tech:"React Native, Firebase, Google",
+            description:"Project of team management app<br>I developed this application as part of a university project, in this case, together with my colleague. We implemented Google login, Firebase database, Google Maps, and notifications.",
         },
         {
             image:[projectImages.exerciseDiaryLogin,
@@ -45,9 +46,9 @@ export const Carousel = forwardRef(({}, ref) => {
                 projectImages.exerciseDiaryDifferentOptions,
                 projectImages.exerciseDiaryRank,
                 projectImages.exerciseDiaryChart],
-            title:'WhaleNotes - team management app',
-            tech:"React Native, Firebase, Google",
-            description:"Project of team management app",
+            title:'Exercise diary',
+            tech:"C++, Qt",
+            description:"Project of exercise diary create with C++ and Qt<br>The application created as part of a university project allows tracking sports results. Since it is a desktop application, it's not particularly useful in reality. However, during its development, I became more familiar with the C++ language and the Qt framework.",
         },
         {
             image: [projectImages.azure,
@@ -58,7 +59,7 @@ export const Carousel = forwardRef(({}, ref) => {
                 projectImages.dbphp2],
             title:'Other',
             tech:"Python, php, Azure Cloud",
-            description:"Other technologies",
+            description:"Other technologies. Currently, I am in the process of taking the Azure Fundamentals 900 course.",
         }
     ];
 

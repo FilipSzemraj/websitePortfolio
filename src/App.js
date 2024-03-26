@@ -131,7 +131,7 @@ function App() {
                     scrollTrigger: {
                         trigger: element,
                         start: "top bottom",
-                        markers: true,
+                        markers: false,
                         endTrigger: parentCardPair,
                         end: "bottom bottom",
                         scrub: true,
