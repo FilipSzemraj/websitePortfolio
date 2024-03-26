@@ -92,17 +92,25 @@ function App() {
                 const currentScroll = window.scrollY;
                 let nextScroll;
 
-                if (e.deltaY > 0) {
-                    if (currentScroll >= totalScrollHeight - windowHeight - 150) {
-                        nextScroll = totalScrollHeight - windowHeight;
+                if(e.type==="wheel") {
+                    if (e.deltaY > 0) {
+                        if (currentScroll >= totalScrollHeight - windowHeight - 150) {
+                            nextScroll = totalScrollHeight - windowHeight;
+                        } else {
+                            nextScroll = Math.min(currentScroll + windowHeight, totalScrollHeight - windowHeight - 150);
+                        }
                     } else {
-                        nextScroll = Math.min(currentScroll + windowHeight, totalScrollHeight - windowHeight - 150);
+                        if (currentScroll >= totalScrollHeight - windowHeight && currentScroll < totalScrollHeight - 150) {
+                            nextScroll = totalScrollHeight - windowHeight - 150;
+                        } else {
+                            nextScroll = Math.max(currentScroll - windowHeight, 0);
+                        }
                     }
-                } else {
-                    if (currentScroll >= totalScrollHeight - windowHeight && currentScroll < totalScrollHeight - 150) {
-                        nextScroll = totalScrollHeight - windowHeight - 150;
-                    } else {
-                        nextScroll = Math.max(currentScroll - windowHeight, 0);
+                } else if(e.type==="keydown"){
+                    if(e.key === "ArrowUp"){
+                        nextScroll= Math.max(currentScroll - windowHeight, 0);
+                    }else if(e.key === "ArrowDown"){
+                        nextScroll= Math.min(currentScroll + windowHeight, totalScrollHeight - windowHeight);
                     }
                 }
 
@@ -111,8 +119,11 @@ function App() {
 
             window.addEventListener('wheel', handleWheel, {passive: false});
 
+            window.addEventListener('keydown', handleWheel, {passive:false})
             return () => {
                 window.removeEventListener('wheel', handleWheel);
+                window.removeEventListener('keydown', handleWheel);
+
             };
         }
     }, []);
@@ -131,7 +142,7 @@ function App() {
                     scrollTrigger: {
                         trigger: element,
                         start: "top bottom",
-                        markers: true,
+                        markers: false,
                         endTrigger: parentCardPair,
                         end: "bottom bottom",
                         scrub: true,
