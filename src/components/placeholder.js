@@ -28,7 +28,7 @@ export const widthOfCard = '50vw';
 function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, background, iconWrapperRef}) {
 
 
-    const { activeProject, setActiveProject } = useActiveProject();
+    const { activeProject, setActiveProject, matches, matchesRef } = useActiveProject();
 
     const imageRef = useRef(null);
     const buttonRefs = useRef([]);
@@ -46,7 +46,11 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
         ...(isWide ? {
             width: widthOfCard,
         } : {
-            width: '42.5vw',
+            width: '92.5vw',
+            height:'20vh',
+            //display:'flex',
+            //justifyContent:'space-around',
+            //alignItems:'space-around'
         }),
     };
 
@@ -71,8 +75,8 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
 
         const childrenCount = React.Children.count(children);
 
-        const tempHeight =
-            (wholeHeight - gap * (childrenCount - 1)) / Math.ceil(childrenCount / 3);
+        /*const tempHeight =
+            (wholeHeight - gap * (childrenCount - 1)) / Math.ceil(childrenCount / 3);*/
 
         const projectTechnologies = {
             0: [4, 5, 6],
@@ -116,7 +120,8 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
                             height: '80%',
                         }
                         : {
-                            height: `${tempHeight}vh`,
+                            height: '80%',
+                            maxHeight:'10vh',
                         }),
                 },
             })
@@ -125,6 +130,7 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
 
     const TechnologyBody = forwardRef(({ activeProject }, ref) => {
         return (
+
             <IconWrapper activeProject={activeProject} ref={ref}>
                 <FirebaseIcon />
                 <AzureIcon />
@@ -176,7 +182,7 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
         const fadeOutButton = contextSafe(() => {
             gsap.to(buttonRefs.current[activeProject], {
                 backgroundColor: 'transparent',
-                duration: 0.3 // Animation duration in seconds
+                duration: 0.3
             });
         });
 
@@ -194,14 +200,15 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
         };
 
         return (
-            <div>
+            <div style={matchesRef.current ? {} : {display:'flex', flexWrap:'wrap', justifyContent:'center', alignItems:'center', width:'100%'}}>
                 {Object.entries(projectsMap).map(([projectName, projectFunction], index) => (
                     <button
                         variant="outline-light"
                         key={projectName}
                         onClick={projectFunction}
                         ref={el => buttonRefs.current[index] = el} // Assigning ref
-                        className={`custom-button ${index == activeProject ? 'active-button' : ''}`}>
+                        className={`custom-button ${index == activeProject ? 'active-button' : ''}`}
+                        style={matchesRef.current ? {} : {margin:'0.25rem', padding:'0.125rem', justifyContent:'center', alignItems:'center'}}>
                         {projectName}
                     </button>
                 ))}
@@ -252,8 +259,16 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
                 className='m-2'
                 style={cardStyle}
             >
-                <Card.Body style={{backgroundColor:'transparent'}}>
-                    <div>
+                <Card.Body style={matchesRef.current ? {} : {
+                    backgroundColor: '',
+                    position: 'relative',
+                    display: 'flex',
+                    flexDirection: 'column', // Arrange children in a column
+                    justifyContent: 'center', // Align children at the start of the main axis
+                    alignItems: 'center', // Align children at the start of the cross axis
+                }}>
+
+                <div style={matchesRef.current ? {} : {padding:'0.25rem', width:'100%'}}>
                         <Card.Title style={{color:"#f0f0f0"}}>{title}</Card.Title>
                     </div>
 
@@ -264,8 +279,9 @@ function CardComponent({ placement, title, textToCard, textToOffcanvas, isWide, 
 
                         </div>
                     ) : null}
-                    {componentMap[title] && componentMap[title].canvas ? React.createElement(componentMap[title].canvas) : null}
-
+                    <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:'1rem'}}>
+                        {componentMap[title] && componentMap[title].canvas ? React.createElement(componentMap[title].canvas) : null}
+                    </div>
                 </Card.Body>
             </Card>
 

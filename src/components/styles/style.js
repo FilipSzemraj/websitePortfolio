@@ -10,22 +10,17 @@ const IconContainer = {
     alignItems: 'center',
     gap: '.75vw',
     flex:'5',
+    width:'100%',
 }
 
 const IconContainerSmallScreen = {
-    /*display:'flex',
-    flexWrap:'wrap',
-    justifyContent:'space-between',
-    gap:'0.25vh',
-    width:'100%',
-    height:'12.5vh',*/
     display: 'flex',
-    flexWrap: 'wrap',
+    backgroundColor: '',
     justifyContent: 'space-between',
-    gap: '.25vh',
+    alignItems:'center',
     width: '100%',
-    height: '12.5vh',
-    flex:'5',
+    minHeight: '10vh',
+    //flex:'1',
 
 }
 

@@ -35,22 +35,15 @@ function App() {
     const nextSectionButtonRef = useRef();
     const tlForMovingDiv = useRef();
 
-    const { activeProject, setActiveProject } = useActiveProject();
+    const { activeProject, setActiveProject, matches, matchesRef } = useActiveProject();
 
-
-
-
-
-    const [matches, setMatches] = useState(window.matchMedia("(min-width: 1025px)").matches);
-    const matchesRef = useRef(matches);
-    matchesRef.current=matches;
 
     const [showPopout, setShowPopout] = useState(false);
 
 
     useEffect(() => {
-        const handler = e => setMatches(e.matches);
-        const mediaQuery = window.matchMedia("(min-width: 1025px)");
+        //const handler = e => setMatches(e.matches);
+        //const mediaQuery = window.matchMedia("(min-width: 1025px)");
 
         const handleResize = () => {
             const actualPosition = window.scrollY;
@@ -58,14 +51,15 @@ function App() {
             window.scrollTo(0, snap(actualPosition));
         };
 
-        mediaQuery.addEventListener('change', handler);
+        //mediaQuery.addEventListener('change', handler);
         window.addEventListener('resize', handleResize);
 
         return () => {
-            mediaQuery.removeEventListener('change', handler);
+            //mediaQuery.removeEventListener('change', handler);
             window.removeEventListener('scroll', handleResize);
         }
     }, []);
+
 
 
 
@@ -156,7 +150,7 @@ function App() {
 
 
     const scrollToNextSection = contextSafe(() => {
-        if(matchesRef.current) {
+        {/*if(matchesRef.current) {*/}
             const nextSection = document.getElementById('nextSection');
             if (nextSection) {
                 gsap.to(window, {
@@ -165,9 +159,9 @@ function App() {
                     duration: 0,
                 });
             }
-        }else{
+        {/* }else{
             setShowPopout(true);
-        }
+        }*/}
 
     });
 
@@ -220,15 +214,12 @@ function App() {
 
             </div>
 
-            {matchesRef.current ? (
+            {/*{matchesRef.current ? (*/}
             <div id="nextSection" className="BodyOfSecondSection" style={styles.ContainerBottom}>
 
                     <Container ref={cardContainer} style={styles.CardsContainer}>
                         <div className="cardPair" id="firstPair" style={styles.CardPair}>
                             <CardPairTechnologiesAndProject matches={matches} firstContainer={firstContainer}/>
-                            <div style={{}}>
-                                {/*<Carousel />*/}
-                            </div>
                         </div>
                         <div className="PathContainer" id="secondPair" style={styles.CardPair}>
                             <div ref={secondContainer} className="PathCenter" style={styles.PathContainer} >
@@ -240,8 +231,13 @@ function App() {
                         <div className="cardPair" id="thirdPair" style={{...styles.CardPair}} onClick={handleClick}>
                             <div ref={thirdContainer} className="divToMove">
                                 <h5>Click somewhere outside this div!</h5>
-                                <p>I created this website to enhance my understanding of GSAP animations and to learn React better</p>
-                                <p style={{textAlign:'left'}}>I know it's just the start of my journey, but I'm very excited about it!</p>
+                                {matchesRef.current && (
+                                    <div>
+                                        <p>I created this website to enhance my understanding of GSAP animations and to learn React better</p>
+                                        <p style={{textAlign:'left'}}>I know it's just the start of my journey, but I'm very excited about it!</p>
+                                    </div>
+                                )}
+
                             </div>
                         </div>
                     </Container>
@@ -250,7 +246,7 @@ function App() {
 
 
             </div>
-            ): null}
+            {/*): null}*/}
 
             <div id="footer" className="text-center" style={{ backgroundColor: '#10110b', width: '100%' }}>
                 <Footer />
