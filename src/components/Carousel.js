@@ -58,35 +58,40 @@ export const projectsData = [
     }
 ];
 
+const DescriptionSection = forwardRef(({}, ref) => {
+
+    const { activeProject, setActiveProject, matchesRef } = useActiveProject();
+
+
+    useGSAP(() => {
+        gsap.fromTo(ref.current, {
+            x:'-100%',
+        },{
+            duration:1.5,
+            ease: 'back.out(1)',
+            x:'0%',
+        })
+
+    },[activeProject])
+    return (
+        <div id="description" className="description" ref={ref}>
+            <dl>
+                <p>
+                    <dt>
+                        - {projectsData[activeProject].tech}
+                    </dt>
+                </p>
+                <dd>
+                    <p dangerouslySetInnerHTML={{__html: projectsData[activeProject].description}}></p>
+                </dd>
+            </dl>
+        </div>
+    )
+});
+
 export const Carousel = forwardRef(({}, ref) => {
 
-    const DescriptionSection = forwardRef(({}, ref) => {
 
-        useGSAP(() => {
-            gsap.fromTo(ref.current, {
-                x:'-100%',
-            },{
-                duration:1.5,
-                ease: 'back.out(1)',
-                x:'0%',
-            })
-
-        }, )
-      return (
-          <div id="description" className="description" ref={ref}>
-          <dl>
-              <p>
-                  <dt>
-                      - {projectsData[activeProject].tech}
-                  </dt>
-              </p>
-              <dd>
-                  <p dangerouslySetInnerHTML={{__html: projectsData[activeProject].description}}></p>
-              </dd>
-          </dl>
-      </div>
-      )
-    });
 
     const { activeProject, setActiveProject, matchesRef } = useActiveProject();
 
